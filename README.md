@@ -2,17 +2,26 @@ Companion repository for []()
 
 Unzip or clone this repository into a directory on your machine.
 
-Install for development (modifying `app/` directory):
+### Install for development (modifying `app/` directory):
+
     npm install
 
-Install for production (demo the app):
+
+### Install for production (demo the app):
+
     npm install --production
 
-Run server:
+
+### Run server:
+
     npm start
 
-Compiling code changes:
+
+### Compiling code changes:
+
     npm run compile
 
-Watch code for changes and compile:
+
+###Watch code for changes and compile:
+
     npm run compile-watch

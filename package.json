@@ -18,7 +18,9 @@
       "reselect": "^2.0.1"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "http-server -p 8001",
+	"compile": "webpack",
+	"compile-watch": "webpack --watch"
   },
   "repository": {
     "type": "git",

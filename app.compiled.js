@@ -120,6 +120,8 @@
 
 	'use strict';
 
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
@@ -162,6 +164,10 @@
 	    return createThunkElement(type, key, attributes, children);
 	  }
 
+	  if (typeof type === 'function') {
+	    return createThunkElement(_extends({ render: type }, type), key, attributes, children);
+	  }
+
 	  return {
 	    attributes: attributes,
 	    children: children,
@@ -188,12 +194,12 @@
 	  };
 	}
 
-	function createThunkElement(data, key, props, children) {
+	function createThunkElement(component, key, props, children) {
 	  return {
 	    type: '#thunk',
 	    children: children,
 	    props: props,
-	    data: data,
+	    component: component,
 	    key: key
 	  };
 	}
@@ -261,9 +267,9 @@
 
 	  if ((0, _utils.isThunk)(element)) {
 	    var props = element.props;
-	    var data = element.data;
+	    var component = element.component;
 	    var _children = element.children;
-	    var render = data.render;
+	    var render = component.render;
 
 	    var output = render({
 	      children: _children,
@@ -304,7 +310,7 @@
 	});
 	exports.isValidAttribute = isValidAttribute;
 	/**
-	 * Check if an attribute shoudl be rendered into the DOM.
+	 * Check if an attribute should be rendered into the DOM.
 	 */
 
 	function isValidAttribute(value) {
@@ -355,7 +361,7 @@
 	 */
 
 	var isSameThunk = exports.isSameThunk = function isSameThunk(left, right) {
-	  return isThunk(left) && isThunk(right) && left.data.render === right.data.render;
+	  return isThunk(left) && isThunk(right) && left.component === right.component;
 	};
 
 	/**
@@ -531,15 +537,16 @@
 
 	function createElement(vnode, path, dispatch, context) {
 	  if ((0, _utils.isText)(vnode)) {
-	    return document.createTextNode(vnode.nodeValue || '');
+	    var value = typeof vnode.nodeValue === 'string' || typeof vnode.nodeValue === 'number' ? vnode.nodeValue : '';
+	    return document.createTextNode(value);
 	  }
 
 	  if ((0, _utils.isThunk)(vnode)) {
 	    var props = vnode.props;
-	    var data = vnode.data;
+	    var component = vnode.component;
 	    var children = vnode.children;
-	    var render = data.render;
-	    var onCreate = data.onCreate;
+	    var render = component.render;
+	    var onCreate = component.onCreate;
 
 	    var model = {
 	      children: children,
@@ -551,8 +558,10 @@
 	    var output = render(model);
 	    var _DOMElement = createElement(output, (0, _utils.createPath)(path, output.key || '0'), dispatch, context);
 	    if (onCreate) onCreate(model);
-	    vnode.data.vnode = output;
-	    vnode.data.model = model;
+	    vnode.state = {
+	      vnode: output,
+	      model: model
+	    };
 	    return _DOMElement;
 	  }
 
@@ -1745,11 +1754,11 @@
 	      updateThunk: function updateThunk(prev, next, path) {
 	        var props = next.props;
 	        var children = next.children;
-	        var _next$data = next.data;
-	        var render = _next$data.render;
-	        var onUpdate = _next$data.onUpdate;
+	        var component = next.component;
+	        var render = component.render;
+	        var onUpdate = component.onUpdate;
 
-	        var prevNode = prev.data.vnode;
+	        var prevNode = prev.state.vnode;
 	        var model = {
 	          children: children,
 	          props: props,
@@ -1761,8 +1770,10 @@
 	        var changes = (0, _diff.diffNode)(prevNode, nextNode, path);
 	        DOMElement = changes.reduce(patch(dispatch, context), DOMElement);
 	        if (onUpdate) onUpdate(model);
-	        next.data.vnode = nextNode;
-	        next.data.model = model;
+	        next.state = {
+	          vnode: nextNode,
+	          model: model
+	        };
 	      },
 	      replaceNode: function replaceNode(prev, next, path) {
 	        var newEl = (0, _createElement2.default)(next, path, dispatch, context);
@@ -1788,12 +1799,14 @@
 
 	function removeThunks(vnode) {
 	  while ((0, _utils.isThunk)(vnode)) {
-	    var _vnode$data = vnode.data;
-	    var onRemove = _vnode$data.onRemove;
-	    var model = _vnode$data.model;
+	    var _vnode = vnode;
+	    var component = _vnode.component;
+	    var state = _vnode.state;
+	    var onRemove = component.onRemove;
+	    var model = state.model;
 
 	    if (onRemove) onRemove(model);
-	    vnode = vnode.data.vnode;
+	    vnode = state.vnode;
 	  }
 
 	  if (vnode.children) {
@@ -4140,21 +4153,32 @@
 
 	var _deku = __webpack_require__(1);
 
+	var _reduxSimpleRouter = __webpack_require__(28);
+
 	exports.default = {
-		render: function render(module) {
-			console.log('m', module);
+		render: function render(_ref) {
+			var dispatch = _ref.dispatch;
+
 			return (0, _deku.element)(
 				'div',
 				null,
-				'This is the index page. ',
+				'This is the index page.',
+				(0, _deku.element)('br', null),
 				(0, _deku.element)(
 					'a',
-					{ href: '/test' },
+					{ href: '/test', onClick: linkClick(dispatch) },
 					'Link to Test page'
 				)
 			);
 		}
 	};
+
+	function linkClick(dispatch) {
+		return function (e) {
+			e.preventDefault();
+			dispatch((0, _reduxSimpleRouter.pushPath)(e.target.getAttribute('href')));
+		};
+	}
 
 /***/ },
 /* 62 */

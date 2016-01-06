@@ -2,8 +2,17 @@ Companion repository for []()
 
 Unzip or clone this repository into a directory on your machine.
 
-If you will be changing the contents of the `app` directory and want to be able to compile these changes simply do `npm install`
+Install for development (modifying `app/` directory):
+    npm install
 
-After installation you can re-compile using `npm run compile` or watch for source changes with `npm run compile-watch`
+Install for production (demo the app):
+    npm install --production
 
-If you are just looking to use the demo app, simply run `npm install --production` to install only the http server and use `npm start` to bring the server up.
+Run server:
+    npm start
+
+Compiling code changes:
+    npm run compile
+
+Watch code for changes and compile:
+    npm run compile-watch

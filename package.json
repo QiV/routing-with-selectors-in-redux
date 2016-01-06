@@ -1,0 +1,33 @@
+{
+  "name": "@download/routing-with-selectors-in-redux",
+  "version": "0.0.0",
+  "description": "",
+  "main": "app.compiled.js",
+  "dependencies": {
+    "http-server": "^0.8.5"
+  },
+  "devDependencies": {
+	  "babel-loader": "^6.2.1",
+      "babel-plugin-syntax-jsx": "^6.3.13",
+      "babel-plugin-transform-react-jsx": "^6.4.0",
+      "babel-preset-es2015": "^6.3.13",
+      "deku": "^2.0.0-rc7",
+      "history": "^1.17.0",
+	  "redux-simple-router": "^1.0.2",
+      "redux": "^3.0.5",
+      "reselect": "^2.0.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/download13/routing-with-selectors-in-redux.git"
+  },
+  "author": "Erin Dachtler <download333@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/download13/routing-with-selectors-in-redux/issues"
+  },
+  "homepage": "https://github.com/download13/routing-with-selectors-in-redux#readme"
+}

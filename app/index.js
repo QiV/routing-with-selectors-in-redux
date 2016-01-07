@@ -14,7 +14,6 @@ import App from './components/app';
 
 function createApp(rootEl) {
 	const store = createStore();
-	window.store=store;
 
 	syncReduxAndRouter(createBrowserHistory(), store);
 

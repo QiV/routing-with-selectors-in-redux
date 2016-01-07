@@ -69,7 +69,6 @@
 
 	function createApp(rootEl) {
 		var store = (0, _store2.default)();
-		window.store = store;
 
 		(0, _reduxSimpleRouter.syncReduxAndRouter)((0, _createBrowserHistory2.default)(), store);
 

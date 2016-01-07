@@ -1,4 +1,4 @@
-Companion repository for []()
+Companion repository for [Routing with selectors and Redux](http://blog.erindachtler.me/2016/01/06/routing-with-selectors-and-redux.html)
 
 Unzip or clone this repository into a directory on your machine.
 
